@@ -1,0 +1,21 @@
+<sbspresets formatversion="1.0" count="1">
+ <sbspreset pkgurl="pkg://Road/Road" description="Exported from Unity" label="unity">
+ <presetinput identifier="$normalformat" uid="2147483649" type="4" value="0"/>
+ <presetinput identifier="$outputsize" uid="1426477519" type="8" value="9,9"/>
+ <presetinput identifier="$randomseed" uid="41174941" type="4" value="0"/>
+ <presetinput identifier="Border_Size" uid="1380461678" type="0" value="0.000000"/>
+ <presetinput identifier="Lines_Hue" uid="1374976472" type="0" value="0.000000"/>
+ <presetinput identifier="Lines_Sat" uid="1374976470" type="0" value="0.000000"/>
+ <presetinput identifier="Lines_Lum" uid="1374976468" type="0" value="0.000000"/>
+ <presetinput identifier="Lines_Shape" uid="1364732453" type="0" value="0.000000"/>
+ <presetinput identifier="Hue_Shift" uid="1367306803" type="0" value="0.000000"/>
+ <presetinput identifier="Saturation" uid="1367306821" type="0" value="0.000000"/>
+ <presetinput identifier="Luminosity" uid="1367306841" type="0" value="0.349000"/>
+ <presetinput identifier="Emboss" uid="1367306959" type="0" value="2.010000"/>
+ <presetinput identifier="Angle" uid="1367306946" type="0" value="0.065000"/>
+ <presetinput identifier="Depth" uid="1367306963" type="0" value="0.000000"/>
+ <presetinput identifier="Contrast" uid="1367306980" type="0" value="0.000000"/>
+ <presetinput identifier="Normal" uid="1367307002" type="0" value="0.475000"/>
+ <presetinput identifier="Relief_Balance" uid="1361776316" type="0" value="32.000000"/>
+ </sbspreset>
+</sbspresets>
