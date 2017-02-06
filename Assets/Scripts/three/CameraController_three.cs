@@ -12,7 +12,15 @@ public class CameraController_three: MonoBehaviour
 	private float maxT = .00001f;
 
 	private float t = .02f;
-	public Vector3 offset; //ideally this is just right to left offset
+    public float GetPlayerT() { return t; }
+    Vector3 splineUp = Vector3.zero;
+    Vector3 splineForward = Vector3.zero;
+    Vector3 splineRight = Vector3.zero;
+    public Vector3 GetSplineUp() { return splineUp; }
+    public Vector3 GetSplineForward() { return splineForward; }
+    public Vector3 GetSplineRight() { return splineRight; }
+
+    public Vector3 offset; //ideally this is just right to left offset
 	public float smooth = 20.0f;
 
 	public bool CUbool = true;
@@ -64,9 +72,9 @@ public class CameraController_three: MonoBehaviour
 		//AxKDebugLines.AddSphere (spline.Interpolate (maxT), 0.3f, Color.green);
 		//AxKDebugLines.AddSphere (spline.Interpolate (minT), 0.3f, Color.magenta);
 			
-		Vector3 splineUp = spline.GetRotatedUpFast (t, 0);
-		Vector3 splineForward = spline.GetTangent (t);
-		Vector3 splineRight = Vector3.Cross (splineUp, splineForward);
+		splineUp = spline.GetRotatedUpFast (t, 0);
+		splineForward = spline.GetTangent (t);
+		splineRight = Vector3.Cross (splineUp, splineForward);
 		//print ("offset = " + offset);
 
 		Vector3 rise = splineUp * offset.y + splineForward * offset.z + splineRight * offset.x * Mathf.Sin(Mathf.Sqrt(Time.time));

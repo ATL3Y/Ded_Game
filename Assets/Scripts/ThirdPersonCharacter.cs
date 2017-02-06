@@ -119,7 +119,7 @@ public class ThirdPersonCharacter : MonoBehaviour
 
 		if (_gun != null & fire) 
 		{
-			_gun.Use ( m_Crosshair.transform, transform ); //simply send "transform" for it to seek player over time
+			_gun.Use ( gameObject.GetComponent<ThirdPersonUserControl>(), m_Crosshair.GetComponent<Crosshair>() ); //simply send "transform" for it to seek player over time
 		}
 
 		if (pickup && !m_pickup) 
@@ -146,7 +146,7 @@ public class ThirdPersonCharacter : MonoBehaviour
 			float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
 			if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
 			{
-				m_Crouching = true;
+				//m_Crouching = true; //disabling crouch
 				return;
 			}
 			m_Capsule.height = m_CapsuleHeight;
@@ -164,7 +164,7 @@ public class ThirdPersonCharacter : MonoBehaviour
 			float crouchRayLength = m_CapsuleHeight - m_Capsule.radius * k_Half;
 			if (Physics.SphereCast(crouchRay, m_Capsule.radius * k_Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
 			{
-				m_Crouching = true;
+				//m_Crouching = true;
 			}
 		}
 	}

@@ -27,7 +27,7 @@ public class UseGun : MonoBehaviour
 		if (_gun != null & _fire) 
 		{
 			
-			_gun.Use ( transform, transform ); //params: targetOne, targetTwo
+			//_gun.Use ( transform, transform ); //params: targetOne, targetTwo
 			_fire = false;
 		}
 

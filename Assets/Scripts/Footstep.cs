@@ -18,7 +18,7 @@ public class Footstep : MonoBehaviour
 
 	void OnTriggerEnter ( Collider other )
 	{
-		//print (other.gameObject.name);
+        //print (other.gameObject.name);
 		if (other.gameObject.transform.parent.gameObject != null && other.gameObject.transform.parent.gameObject.tag == "Terrain") 
 		{
 			GetComponent<ParticleSystem> ().Emit (1);

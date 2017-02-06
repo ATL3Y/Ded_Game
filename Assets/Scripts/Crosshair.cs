@@ -37,8 +37,13 @@ public class Crosshair : MonoBehaviour
 
 	public void StartATL( ThirdPersonUserControl player, CurvySpline spline ) 
 	{
-		//Note that confined cursor lock mode is only supported on the standalone player platform on Windows and Linux.
-		Cursor.lockState = CursorLockMode.Confined;
+        if (Cursor.lockState != CursorLockMode.Confined)
+        {
+            //Not really working...
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+
 		Cursor.visible = false;
 		offset = new Vector3 (0, 0, 0);
 
@@ -64,11 +69,6 @@ public class Crosshair : MonoBehaviour
 
 		//print("mouse x " + Input.GetAxis("Mouse X") + ", mouse y " + Input.GetAxis("Mouse Y"));
 		offset += new Vector3(-Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0.0f);
-		//print ("offset = " + offset);
-		offset = new Vector3(Mathf.Clamp(offset.x, -width/2.0f, width/2.0f), Mathf.Clamp(offset.y, lift, height + lift), 0.0f);
-		//offset *= mult; doesn't work
-
-		//print ("offset after clamp = " + offset);
 
 		t = spline.GetNearestPointTF (player.transform.position);
 		Vector3 splineUp = spline.GetRotatedUpFast (t, 0);
@@ -83,10 +83,16 @@ public class Crosshair : MonoBehaviour
 		Vector3 targetPosition = targetT + tempOffset;
 
 		transform.position = Vector3.Lerp (transform.position, targetPosition, Time.deltaTime * smooth * 3.0f );
-		//transform.localRotation = Quaternion.Slerp( transform.localRotation, Quaternion.LookRotation (-splineForward.normalized), Time.deltaTime * smooth );
+        //transform.localRotation = Quaternion.Slerp( transform.localRotation, Quaternion.LookRotation (-splineForward.normalized), Time.deltaTime * smooth );
 
-		//transform.position = targetPosition;
-		transform.localRotation = Camera.main.transform.localRotation;
+        //clamp the final position to this
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+        pos.x = Mathf.Clamp01(pos.x);
+        pos.y = Mathf.Clamp01(pos.y);
+        transform.position = Camera.main.ViewportToWorldPoint(pos);
+
+        //transform.position = targetPosition;
+        transform.localRotation = Camera.main.transform.localRotation;
 
 		if (fire) //fire is only true for one frame
 		{
@@ -95,7 +101,7 @@ public class Crosshair : MonoBehaviour
 			_large.gameObject.GetComponent<Renderer> ().material = fireL;
 
 			//print ("in fire, mat name = " + _medium.gameObject.GetComponent<Renderer> ().material.name);
-			StartCoroutine (Delay ( 6.0f ));
+			StartCoroutine (Delay ( .5f ));
 		} 
 		else if (aim && !fire) 
 		{

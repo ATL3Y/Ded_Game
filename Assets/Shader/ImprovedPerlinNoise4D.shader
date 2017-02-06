@@ -165,6 +165,8 @@ Shader "Noise/ImprovedPerlinNoise4D"
 				//float n = turbulence(p, 4);
 				
 				float n = ridgedmf(p, 4, 1.0);
+
+				n /= 4 + .5 * n;
 				
 			    return half4(n,n,n,1);
 			}

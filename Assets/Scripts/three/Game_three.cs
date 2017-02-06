@@ -67,33 +67,35 @@ public class Game_three : MonoBehaviour
 
 	}
 
-	void Update () 
-	{
-		player.UpdateATL ( spline );
+    void Update()
+    {
+        player.UpdateATL(spline);
 
-		concaveHullController.UpdateATL ( player, spline );
-		
-		skyController.UpdateATL ();
+        concaveHullController.UpdateATL(player, spline);
 
-		if (attacker) 
-		{
-			attackerController.UpdateATL ( player );
-		}
+        skyController.UpdateATL();
 
-		gunController.UpdateATL ( player, crosshair );
+        if (attacker)
+        {
+            attackerController.UpdateATL(player);
+        }
 
-		for (int i = 0; i < makeMesh.Count; i++) 
-		{
-			makeMesh[i].UpdateATL ();
-		}
+        gunController.UpdateATL(player, crosshair, spline);
 
-		cameraController_three.UpdateATL ( player, spline ); 
+        for (int i = 0; i < makeMesh.Count; i++)
+        {
+            makeMesh[i].UpdateATL();
+        }
 
-		crosshair.UpdateATL ( player, spline );
+        cameraController_three.UpdateATL(player, spline);
 
-		bigText.UpdateATL ( player, spline );
+        crosshair.UpdateATL(player, spline);
 
-		boidlord.UpdateATL (player, spline);
+        bigText.UpdateATL(player, spline);
+    }
 
+    private void FixedUpdate()
+    {
+        boidlord.UpdateATL (player, spline, crosshair);
 	}
 }

@@ -29,7 +29,7 @@ public class PlayerController_three : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	public void UpdateATL ( ) 
+	public void UpdateATL ( Crosshair crosshair ) 
 	{
 
 		if (_gun != null) 
@@ -37,7 +37,7 @@ public class PlayerController_three : MonoBehaviour
 			if (Input.GetMouseButtonDown(0)) //Input.GetKeyDown (KeyCode.Mouse0)
 			{
 				print ("input");
-				_gun.Use ( transform, transform ); //params: targetOne, targetTwo
+				//_gun.Use( ); 
 			}
 		}
 
@@ -78,8 +78,8 @@ public class PlayerController_three : MonoBehaviour
 		}
 
 
-		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
+		//Cursor.lockState = CursorLockMode.Locked;
+		//Cursor.visible = false;
 
 		if (transform.position.y < -20.0f) 
 		{

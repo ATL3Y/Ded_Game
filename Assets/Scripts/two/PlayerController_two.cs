@@ -35,7 +35,7 @@ public class PlayerController_two : MonoBehaviour //Singleton<PlayerController>
 			if (Input.GetMouseButtonDown(0)) //Input.GetKeyDown (KeyCode.Mouse0)
 			{
 				print ("input");
-				_gun.Use ( transform, transform ); //params: targetOne, targetTwo
+				//_gun.Use ( transform, transform ); //params: targetOne, targetTwo
 			}
 		}
 

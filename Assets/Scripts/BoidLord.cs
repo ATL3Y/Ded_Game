@@ -7,29 +7,21 @@ using FluffyUnderware.Curvy;
 public class BoidLord : MonoBehaviour 
 {
 
-	public float minVelocity = 1;
-	public float maxVelocity = 5;
-	public float randomness = 3;
-
-	private int flockSize = 100;
+	private int flockSize = 10;
 	public BoidFlocking prefab;
 
 	public Vector3 flockCenter;
 	public Vector3 flockVelocity;
 
 	private List <BoidFlocking> _boids;
-	/*
-	public float seperationStrength = 0.4f; //small
-	public float cohesionStrength = 0.8f; //med
-	public float alignmentStrength = 1.2f; //large
-	public float targetStrength = 1.8f;
-	public float randomStrength = 0.2f;
 
-	public float offset = 5.5f;
-	public float lift = 10.0f;
-	public float smooth = 120.0f;
+    public float neighborRadius = 15.0f;
+	public float seperationStrength = 1.0f; 
+	public float cohesionStrength = 1.0f; 
+	public float alignmentStrength = 1.0f; 
+	public float targetStrength = 1.0f;
+
 	private float t;
-	*/
 
 	private bool init = false;
 
@@ -50,15 +42,13 @@ public class BoidLord : MonoBehaviour
 
 			boid.transform.parent = transform;
 			boid.transform.localPosition = position;
-			boid.GetComponent<BoidFlocking>().SetController ( this );
-			boid.GetComponent<BoidFlocking> ().StartATL ( this, player, spline, crosshair ); 
+			boid.GetComponent<BoidFlocking> ().StartATL ( i, this, player, spline, crosshair ); 
 			_boids.Add( boid );
 		}
 
-
-	}
+    }
 		
-	public void UpdateATL ( ThirdPersonUserControl player, CurvySpline spline ) 
+	public void UpdateATL ( ThirdPersonUserControl player, CurvySpline spline, Crosshair crosshair) 
 	{
 		
 		if (!init && spline.IsInitialized)
@@ -69,43 +59,27 @@ public class BoidLord : MonoBehaviour
 		if (!init)
 			return;
 
-		/*
-		t = spline.GetNearestPointTF (player.transform.position);
-
-		float targetPositionT = t - offset / spline.Length;
-		Vector3 targetT = spline.Interpolate (targetPositionT);
-		Vector3 targetPosition = targetT;
-
-		transform.position = Vector3.Lerp (transform.position, targetPosition, Time.deltaTime * smooth );
-		transform.localRotation = Quaternion.Slerp( transform.localRotation, Quaternion.LookRotation (-splineForward.normalized), Time.deltaTime * smooth );
-
-		transform.position = targetPosition;
-		transform.localRotation = Camera.main.transform.localRotation;
-		*/
-
 		Vector3 theCenter = Vector3.zero;
 		Vector3 theVelocity = Vector3.zero;
 
 		flockSize = _boids.Count;
+      //  transform.position = player.transform.position + Camera.main.transform.forward * 10.0f;
 
-		transform.position = player.transform.position + Camera.main.transform.forward * 3.0f;
-			
-		for (int i = 0; i < _boids.Count; i++) 
+        for (int i = 0; i < _boids.Count; i++) 
 		{
-			theCenter += _boids [i].transform.localPosition;
+			theCenter += _boids [i].transform.position;
 			theVelocity += _boids [i].GetComponent<Rigidbody> ().velocity;
 		}
 
 		flockCenter = theCenter / flockSize;
+        //AxKDebugLines.AddFancySphere(flockCenter, 1f, Color.red, 0);
 		flockVelocity = theVelocity / flockSize;
+        //AxKDebugLines.AddLine(flockCenter, flockCenter + flockVelocity, Color.red, 0);
 
-		/*
 		for (int i = 0; i < _boids.Count; i++) 
 		{
-			_boids[i].GetComponent<BoidFlocking> ().UpdateATL ( this, player, spline );
+            _boids[i].GetComponent<BoidFlocking> ().UpdateATL ( _boids, this, player, spline, crosshair );
 		}
-		*/
-
 	}
 
 	public void RemoveBoid( BoidFlocking boid )

@@ -1,34 +1,62 @@
 ﻿using UnityEngine;
 using System.Collections;
+using FluffyUnderware.Curvy;
 
 public class Missile : MonoBehaviour 
 {
 
-	private float _speed = 6.0f; //can't change params in editor without instants
-	public Transform target;
-	private float _targetDelay = 6.0f;
+	private float _speed = 100.0f; 
+	private float _targetDelay = 3.0f;
 	private Color _color;
+    private bool onceAround = false;
 
-	public void UpdateATL ( ThirdPersonUserControl player_three ) 
+	public void UpdateATL ( ThirdPersonUserControl player_three, Crosshair crosshair, CurvySpline spline) 
 	{
 		
-		_targetDelay -= Time.deltaTime; //if commented out, disabling transition to seeking the target 
+		_targetDelay -= Time.deltaTime;
 
-		if (_targetDelay < 0.5f) // > aims at target at outset until delay time. < aims at target after delay time
+        // aim through crosshair 
+        Quaternion targetDirection = Quaternion.LookRotation(crosshair.transform.forward);
+
+        // passed the crosshair and delay
+        if (_targetDelay < 0.5f) 
 		{
-			target = player_three.transform;
-			Quaternion targetDirection = Quaternion.LookRotation (((target.position + player_three.transform.up) - transform.position).normalized); //aim at heart
-			transform.rotation = Quaternion.Slerp (transform.rotation, targetDirection, Time.deltaTime * 2.0f); 
-		}
-		Vector3 velocity = (transform.forward) * _speed;
-		GetComponent< Rigidbody >().MovePosition( transform.position + velocity * Time.deltaTime * 2.0f );
+            if(_speed > 10.0f)
+            {
+                _speed -= Time.deltaTime;
+            }
+
+            if(Vector3.Distance(gameObject.transform.position, player_three.transform.position) < 5.0f)
+            {
+                onceAround = true;
+            }
+
+            // going around track
+            if ( !onceAround )
+            {
+
+                float t = spline.GetNearestPointTF(gameObject.transform.position);
+                t *= .95f;
+                Vector3 splineUp = spline.GetRotatedUpFast(t, 0);
+                Vector3 targetPosition = spline.Interpolate(t) + splineUp * 1.7f;
+
+                targetDirection = Quaternion.LookRotation((targetPosition - transform.position).normalized);
+            }
+            // circling player - should be the gun
+            else if (onceAround)
+            {
+                targetDirection = Quaternion.LookRotation(((player_three.transform.position + player_three.transform.up) - transform.position).normalized); //aim at heart
+            }
+        } 
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetDirection, Time.deltaTime);
+        Vector3 velocity = (transform.forward) * _speed;
+		GetComponent< Rigidbody >().MovePosition( transform.position + velocity * Time.deltaTime);
 
 	}
 
-	public void StartATL ( Transform newTarget, Vector3 startDirection, Vector3 startPosition ) 
+	public void StartATL ( Vector3 startDirection, Vector3 startPosition ) 
 	{
-		target = newTarget;
-		//transform.up = transform.forward;
 
 		gameObject.AddComponent< TrailRenderer > (); 
 		GetComponent< TrailRenderer > ().material.shader = Shader.Find ("Particles/Additive"); 
@@ -42,13 +70,13 @@ public class Missile : MonoBehaviour
 		ColorUtility.TryParseHtmlString ("#ED67FF53", out _color);
 		GetComponent< TrailRenderer >().material.SetColor("_TintColor", _color);
 	
-
-		GetComponent< TrailRenderer > ().startWidth = .12f;
-		GetComponent< TrailRenderer > ().endWidth = .4f;
+		GetComponent< TrailRenderer > ().startWidth = .06f;
+		GetComponent< TrailRenderer > ().endWidth = .2f;
 
 		Rigidbody r = gameObject.AddComponent< Rigidbody > ();
 		r.isKinematic = true;
-		//r.useGravity = false;
+		r.useGravity = false;
+        r.angularDrag = 0.0f;
 
 		transform.localScale *= .2f; // new Vector3 (.01f, .01f, .01f);
 		transform.position = startPosition;
